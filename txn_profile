@@ -1,0 +1,62 @@
+Name : Transaction profile Generalized
+Grid name : txn_profile
+
+Description: this grid is designed for the purpose
+of supplying some major details of the process to
+evaluate its potential for improvement.
+
+re-cycle database to reset accumulative counters
+
+refresh 90 – scale down based on performance 
+create from command line:
+
+load  1 user-users connected
+load  2 transactions-transaction load (1)
+load  3 transactions-transaction load (2)
+load  4 loading wait(s)-user wait description
+load  5 undo-generating undo
+load  6 temp-session temp usage
+load  7 cursors-user current open cursors
+load  8 locking-row lock waits
+load  9 locking-blocking sessions
+load 10 memory-user block io
+load 11 user-user pga usage
+load 12 session-top sessions by cpu
+load 13 performance-system load
+
+save grid txn_profile
+
+to load this grid next time: load grid txn_profile
+
+Interpetation
+
+working left to right cell by cell row,cell:
+
+1,1 : sid and username to match to remaining cells
+1,2 : use sid to match to serial# and program name
+1,3 : would provide details on undo segment usage
+1,4 : will show waits and amont of time waited, this can provide
+      an area for improvement
+2,1 : this metric will reveal undo generated, and a possible 
+      area of immprovement
+2,2 : this metric shows temp storge being used for sorting showing
+      that the operation could not sort in memory and an index may
+      be needed
+2,3 : this will show cursors, which could be  aproblem if cursors 
+      are being recursively created
+2,4 : row lock waits show waiting is occurring when a lock is 
+    : requested, possibly showing a need for bulk updates to reduce 
+      the locks/waits
+3,1 : this metric will show process blocking a running process,
+      if it is discovered it is a background process the some system 
+      tuning may be needed
+3,2 : this metric will show memory blocks read/written which may 
+      be coupled with another indicator such as buffer waits
+3,3 : this metric will indicate if the amount of memory
+      dedicated to the program global area is sufficient
+3,4 : this metric will indicate cpu by session, checking server
+      metric could show if there is a cpu constraint
+4,1 : this metric is the current system load on the server where
+      the database server is hosted
+
+       
